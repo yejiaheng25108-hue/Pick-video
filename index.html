@@ -38,33 +38,40 @@
     <!-- 主要内容 -->
     <main class="main">
         <div class="container">
-            <!-- 主视觉区 -->
-            <section class="hero">
-                <div class="hero-content">
-                    <h2 class="hero-title">
-                        不知道看什么？<br>
-                        <span class="gradient-text">让怪兽帮你选！</span>
-                    </h2>
-                    <p class="hero-subtitle">发现热门电影和电视剧，告别选择困难症</p>
-                    <button class="btn-primary btn-surprise" id="surpriseBtn">
-                        <span class="btn-icon">🎲</span>
-                        <span class="btn-text">随便看看</span>
-                    </button>
-                </div>
-                <div class="hero-monster">
-                    <img src="monster.png" alt="Monster Mascot" class="monster-img">
-                </div>
-            </section>
-
             <!-- 发现标签页 -->
             <section class="tab-content active" id="discoverTab">
+                <!-- 主视觉区 -->
+                <section class="hero">
+                    <div class="hero-content">
+                        <h2 class="hero-title">
+                            不知道看什么？<br>
+                            <span class="gradient-text">让怪兽帮你选！</span>
+                        </h2>
+                        <p class="hero-subtitle">发现热门电影和电视剧，告别选择困难症</p>
+                        <button class="btn-primary btn-surprise" id="surpriseBtn">
+                            <span class="btn-icon">🎲</span>
+                            <span class="btn-text">随便看看</span>
+                        </button>
+                    </div>
+                    <div class="hero-monster">
+                        <img src="monster.png" alt="Monster Mascot" class="monster-img">
+                    </div>
+                </section>
+
                 <!-- 类型筛选 -->
                 <div class="genre-filter">
                     <button class="filter-btn active" data-media="movie">🎬 电影</button>
                     <button class="filter-btn" data-media="tv">📺 剧集</button>
-                    <select class="genre-select" id="genreSelect">
-                        <option value="">所有类型</option>
-                    </select>
+                    <div class="custom-select" id="customGenreSelect">
+                        <div class="select-trigger">
+                            <span class="selected-text">所有类型</span>
+                            <span class="select-arrow">▼</span>
+                        </div>
+                        <div class="select-options">
+                            <div class="option active" data-value="">所有类型</div>
+                            <!-- Options will be populated here -->
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 热门内容 -->

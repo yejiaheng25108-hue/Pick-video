@@ -58,8 +58,8 @@ async function discoverByGenre(mediaType = 'movie', genreId = '') {
 function createMovieCard(item) {
     const mediaType = item.media_type || currentMediaType;
     const title = item.title || item.name;
-    const posterPath = item.poster_path 
-        ? `${IMAGE_BASE_URL}/w500${item.poster_path}` 
+    const posterPath = item.poster_path
+        ? `${IMAGE_BASE_URL}/w500${item.poster_path}`
         : 'https://via.placeholder.com/500x750/1e293b/64748b?text=暂无海报';
     const rating = item.vote_average ? item.vote_average.toFixed(1) : 'N/A';
     const year = (item.release_date || item.first_air_date || '').split('-')[0];
@@ -76,7 +76,7 @@ function createMovieCard(item) {
             </div>
         </div>
     `;
-    
+
     card.addEventListener('click', () => showDetails(item.id, mediaType));
     return card;
 }
@@ -85,12 +85,12 @@ function createMovieCard(item) {
 function renderMovieGrid(items, gridId) {
     const grid = document.getElementById(gridId);
     grid.innerHTML = '';
-    
+
     if (!items || items.length === 0) {
         grid.innerHTML = '<p style="grid-column: 1/-1; text-align: center; color: var(--color-text-muted);">暂无内容</p>';
         return;
     }
-    
+
     items.forEach(item => {
         grid.appendChild(createMovieCard(item));
     });
@@ -101,28 +101,28 @@ async function showDetails(id, mediaType) {
     const modal = document.getElementById('detailModal');
     const modalBody = document.getElementById('modalBody');
     const loadingOverlay = document.getElementById('loadingOverlay');
-    
+
     loadingOverlay.classList.add('active');
-    
+
     const data = await getDetails(id, mediaType);
-    
+
     loadingOverlay.classList.remove('active');
-    
+
     if (!data) {
         alert('获取详情失败，请稍后重试');
         return;
     }
-    
+
     const title = data.title || data.name;
-    const backdropPath = data.backdrop_path 
-        ? `${IMAGE_BASE_URL}/original${data.backdrop_path}` 
+    const backdropPath = data.backdrop_path
+        ? `${IMAGE_BASE_URL}/original${data.backdrop_path}`
         : `${IMAGE_BASE_URL}/w500${data.poster_path}`;
     const rating = data.vote_average ? data.vote_average.toFixed(1) : 'N/A';
     const releaseDate = data.release_date || data.first_air_date || '未知';
     const runtime = data.runtime ? `${data.runtime} 分钟` : (data.number_of_seasons ? `${data.number_of_seasons} 季` : '');
     const genres = data.genres ? data.genres.map(g => g.name).join(', ') : '';
     const overview = data.overview || '暂无简介';
-    
+
     modalBody.innerHTML = `
         <img src="${backdropPath}" alt="${title}" class="detail-backdrop" onerror="this.style.display='none'">
         <h2 class="detail-title">${title}</h2>
@@ -134,13 +134,15 @@ async function showDetails(id, mediaType) {
         </div>
         <p class="detail-overview">${overview}</p>
     `;
-    
+
     modal.classList.add('active');
+    document.body.style.overflow = 'hidden'; // 禁止背景滚动
 }
 
 // 关闭弹窗
 function closeModal() {
     document.getElementById('detailModal').classList.remove('active');
+    document.body.style.overflow = ''; // 恢复背景滚动
 }
 
 // ==================== 加载内容 ====================
@@ -149,19 +151,19 @@ function closeModal() {
 async function loadContent() {
     const loadingOverlay = document.getElementById('loadingOverlay');
     loadingOverlay.classList.add('active');
-    
+
     const [trending, popular] = await Promise.all([
         currentGenre ? discoverByGenre(currentMediaType, currentGenre) : getTrending(currentMediaType),
         getPopular(currentMediaType)
     ]);
-    
+
     loadingOverlay.classList.remove('active');
-    
+
     if (trending) {
         trendingData = trending.results;
         renderMovieGrid(trendingData, 'trendingGrid');
     }
-    
+
     if (popular) {
         popularData = popular.results;
         renderMovieGrid(popularData, 'popularGrid');
@@ -175,7 +177,7 @@ function showRandomPick() {
         alert('请稍候，正在加载内容...');
         return;
     }
-    
+
     const randomItem = allItems[Math.floor(Math.random() * allItems.length)];
     const mediaType = randomItem.media_type || currentMediaType;
     showDetails(randomItem.id, mediaType);
@@ -185,21 +187,21 @@ function showRandomPick() {
 async function performSearch() {
     const searchInput = document.getElementById('searchInput');
     const query = searchInput.value.trim();
-    
+
     if (!query) {
         alert('请输入搜索内容');
         return;
     }
-    
+
     const loadingOverlay = document.getElementById('loadingOverlay');
     loadingOverlay.classList.add('active');
-    
+
     const results = await searchMulti(query);
-    
+
     loadingOverlay.classList.remove('active');
-    
+
     if (results && results.results) {
-        const filtered = results.results.filter(item => 
+        const filtered = results.results.filter(item =>
             item.media_type === 'movie' || item.media_type === 'tv'
         );
         renderMovieGrid(filtered, 'searchGrid');
@@ -209,18 +211,63 @@ async function performSearch() {
 
 // 加载类型列表
 async function loadGenres() {
-    const genreSelect = document.getElementById('genreSelect');
+    const optionsContainer = document.querySelector('.select-options');
     const data = await getGenres(currentMediaType);
-    
+
     if (data && data.genres) {
-        genreSelect.innerHTML = '<option value="">所有类型</option>';
+        optionsContainer.innerHTML = '<div class="option active" data-value="">所有类型</div>';
         data.genres.forEach(genre => {
-            const option = document.createElement('option');
-            option.value = genre.id;
+            const option = document.createElement('div');
+            option.className = 'option';
+            option.dataset.value = genre.id;
             option.textContent = genre.name;
-            genreSelect.appendChild(option);
+            optionsContainer.appendChild(option);
         });
+
+        setupCustomSelect();
     }
+}
+
+// 设置自定义下拉菜单
+function setupCustomSelect() {
+    const customSelect = document.getElementById('customGenreSelect');
+    const trigger = customSelect.querySelector('.select-trigger');
+    const options = customSelect.querySelectorAll('.option');
+    const selectedText = customSelect.querySelector('.selected-text');
+
+    // 切换下拉菜单
+    trigger.onclick = (e) => {
+        e.stopPropagation();
+        customSelect.classList.toggle('open');
+    };
+
+    // 选择选项
+    options.forEach(option => {
+        option.onclick = (e) => {
+            e.stopPropagation();
+
+            // 更新选中状态
+            options.forEach(opt => opt.classList.remove('active'));
+            option.classList.add('active');
+
+            // 更新显示文本
+            selectedText.textContent = option.textContent;
+
+            // 更新值并触发加载
+            currentGenre = option.dataset.value;
+            loadContent();
+
+            // 关闭菜单
+            customSelect.classList.remove('open');
+        };
+    });
+
+    // 点击外部关闭
+    document.addEventListener('click', (e) => {
+        if (!customSelect.contains(e.target)) {
+            customSelect.classList.remove('open');
+        }
+    });
 }
 
 // ==================== 事件监听 ====================
@@ -229,54 +276,54 @@ document.addEventListener('DOMContentLoaded', () => {
     // 初始化加载
     loadContent();
     loadGenres();
-    
+
     // 随机推荐按钮
     document.getElementById('surpriseBtn').addEventListener('click', showRandomPick);
-    
+
     // 导航标签切换
     document.querySelectorAll('.nav-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             // 更新按钮状态
             document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
+
             // 切换标签页
             const tab = btn.dataset.tab;
             document.querySelectorAll('.tab-content').forEach(t => t.classList.remove('active'));
             document.getElementById(`${tab}Tab`).classList.add('active');
         });
     });
-    
+
     // 媒体类型切换
     document.querySelectorAll('.filter-btn').forEach(btn => {
         btn.addEventListener('click', () => {
             document.querySelectorAll('.filter-btn').forEach(b => b.classList.remove('active'));
             btn.classList.add('active');
-            
+
             currentMediaType = btn.dataset.media;
             currentGenre = '';
-            document.getElementById('genreSelect').value = '';
+            // 重置自定义下拉菜单
+            const customSelect = document.getElementById('customGenreSelect');
+            if (customSelect) {
+                customSelect.querySelector('.selected-text').textContent = '所有类型';
+                customSelect.classList.remove('open');
+            }
+
             loadContent();
             loadGenres();
         });
     });
-    
-    // 类型筛选
-    document.getElementById('genreSelect').addEventListener('change', (e) => {
-        currentGenre = e.target.value;
-        loadContent();
-    });
-    
+
     // 搜索
     document.getElementById('searchBtn').addEventListener('click', performSearch);
     document.getElementById('searchInput').addEventListener('keypress', (e) => {
         if (e.key === 'Enter') performSearch();
     });
-    
+
     // 关闭弹窗
     document.getElementById('modalClose').addEventListener('click', closeModal);
     document.querySelector('.modal-overlay').addEventListener('click', closeModal);
-    
+
     // ESC 键关闭弹窗
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();
