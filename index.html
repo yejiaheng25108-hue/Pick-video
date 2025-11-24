@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="怪兽选片 - 不知道看什么？让怪兽帮你选！发现热门电影和电视剧">
+    <meta name="keywords" content="电影推荐,电视剧推荐,随机选片,TMDB">
+    <title>🎬 怪兽选片 Monster Pick</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800&family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <!-- 背景装饰 -->
+    <div class="bg-decoration"></div>
+    
+    <!-- 页头 -->
+    <header class="header">
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <span class="logo-icon">👾</span>
+                    <h1 class="logo-text">怪兽选片</h1>
+                </div>
+                <nav class="nav">
+                    <button class="nav-btn active" data-tab="discover">🔥 发现</button>
+                    <button class="nav-btn" data-tab="search">🔍 搜索</button>
+                </nav>
+            </div>
+        </div>
+    </header>
+
+    <!-- 主要内容 -->
+    <main class="main">
+        <div class="container">
+            <!-- 主视觉区 -->
+            <section class="hero">
+                <div class="hero-content">
+                    <h2 class="hero-title">
+                        不知道看什么？<br>
+                        <span class="gradient-text">让怪兽帮你选！</span>
+                    </h2>
+                    <p class="hero-subtitle">发现热门电影和电视剧，告别选择困难症</p>
+                    <button class="btn-primary btn-surprise" id="surpriseBtn">
+                        <span class="btn-icon">🎲</span>
+                        <span class="btn-text">随便看看</span>
+                    </button>
+                </div>
+                <div class="hero-monster">
+                    <div class="monster-emoji">👹</div>
+                </div>
+            </section>
+
+            <!-- 发现标签页 -->
+            <section class="tab-content active" id="discoverTab">
+                <!-- 类型筛选 -->
+                <div class="genre-filter">
+                    <button class="filter-btn active" data-media="movie">🎬 电影</button>
+                    <button class="filter-btn" data-media="tv">📺 剧集</button>
+                    <select class="genre-select" id="genreSelect">
+                        <option value="">所有类型</option>
+                    </select>
+                </div>
+
+                <!-- 热门内容 -->
+                <div class="section">
+                    <h3 class="section-title">🔥 热门推荐</h3>
+                    <div class="movie-grid" id="trendingGrid">
+                        <!-- 骨架屏 -->
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                    </div>
+                </div>
+
+                <!-- 流行内容 -->
+                <div class="section">
+                    <h3 class="section-title">⭐ 大家都在看</h3>
+                    <div class="movie-grid" id="popularGrid">
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                        <div class="skeleton-card"></div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- 搜索标签页 -->
+            <section class="tab-content" id="searchTab">
+                <div class="search-container">
+                    <div class="search-box">
+                        <input type="text" class="search-input" id="searchInput" placeholder="搜索电影或电视剧...">
+                        <button class="search-btn" id="searchBtn">🔍 搜索</button>
+                    </div>
+                </div>
+                <div class="section">
+                    <h3 class="section-title" id="searchResultTitle" style="display: none;">搜索结果</h3>
+                    <div class="movie-grid" id="searchGrid"></div>
+                </div>
+            </section>
+        </div>
+    </main>
+
+    <!-- 详情弹窗 -->
+    <div class="modal" id="detailModal">
+        <div class="modal-overlay"></div>
+        <div class="modal-content">
+            <button class="modal-close" id="modalClose">✕</button>
+            <div class="modal-body" id="modalBody">
+                <!-- 动态内容 -->
+            </div>
+        </div>
+    </div>
+
+    <!-- 加载提示 -->
+    <div class="loading-overlay" id="loadingOverlay">
+        <div class="loading-spinner">
+            <div class="spinner-monster">👾</div>
+            <p class="loading-text">怪兽正在寻找...</p>
+        </div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
