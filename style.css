@@ -842,3 +842,40 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+/* 自定义下拉菜单滚动条样式 */
+.select-options::-webkit-scrollbar {
+    width: 8px;
+}
+
+.select-options::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+}
+
+.select-options::-webkit-scrollbar-thumb {
+    background: var(--gradient-primary);
+    border-radius: var(--radius-sm);
+}
+
+.select-options::-webkit-scrollbar-thumb:hover {
+    background: var(--gradient-accent);
+}
+
+/* 全局页面滚动条样式 */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gradient-primary);
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gradient-accent);
+}
