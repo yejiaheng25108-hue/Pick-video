@@ -6,7 +6,7 @@
     --color-bg-card: rgba(25, 31, 56, 0.6);
     --color-bg-hover: rgba(40, 48, 80, 0.8);
 
-    /* æ¸å˜è‰² */
+    /* æ¸å˜è‰?*/
     --gradient-primary: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
     --gradient-secondary: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
     --gradient-accent: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);
@@ -17,7 +17,7 @@
     --color-text-secondary: #b8c1ec;
     --color-text-muted: #6b7a99;
 
-    /* å¼ºè°ƒè‰² */
+    /* å¼ºè°ƒè‰?*/
     --color-accent: #667eea;
     --color-accent-bright: #a78bfa;
     --color-success: #10b981;
@@ -245,7 +245,7 @@ body {
     border-color: var(--color-accent-bright);
 }
 
-/* ==================== å†…å®¹åŒº ==================== */
+/* ==================== å†…å®¹åŒ?==================== */
 .section {
     margin-bottom: var(--spacing-xl);
 }
@@ -325,7 +325,7 @@ body {
     font-weight: 600;
 }
 
-/* ==================== éª¨æ¶å± ==================== */
+/* ==================== éª¨æ¶å±?==================== */
 .skeleton-card {
     background: linear-gradient(90deg,
             rgba(255, 255, 255, 0.05) 25%,
@@ -418,7 +418,7 @@ body {
     box-shadow: var(--shadow-glow);
 }
 
-/* ==================== è‡ªå®šä¹‰ä¸‹æ‹‰èœå• ==================== */
+/* ==================== è‡ªå®šä¹‰ä¸‹æ‹‰èœå?==================== */
 .custom-select {
     position: relative;
     width: 200px;
@@ -519,6 +519,7 @@ body {
 }
 
 .modal-content {
+    overflow-x: hidden;
     position: relative;
     background: var(--color-bg-secondary);
     border-radius: var(--radius-lg);
@@ -550,7 +551,7 @@ body {
 
 .modal-close:hover {
     background: rgba(255, 255, 255, 0.2);
-    transform: rotate(90deg);
+
 }
 
 .modal-body {
@@ -628,6 +629,7 @@ body {
 }
 
 .modal-content {
+    overflow-x: hidden;
     position: relative;
     background: var(--color-bg-secondary);
     border-radius: var(--radius-lg);
@@ -659,7 +661,7 @@ body {
 
 .modal-close:hover {
     background: rgba(255, 255, 255, 0.2);
-    transform: rotate(90deg);
+
 }
 
 .modal-body {
@@ -807,7 +809,7 @@ body {
     }
 }
 
-/* ==================== å“åº”å¼è®¾è®¡ ==================== */
+/* ==================== å“åº”å¼è®¾è®?==================== */
 @media (max-width: 768px) {
     .hero {
         grid-template-columns: 1fr;
@@ -842,6 +844,44 @@ body {
         grid-template-columns: repeat(2, 1fr);
     }
 }
+/* ×Ô¶¨ÒåÏÂÀ­²Ëµ¥¹ö¶¯ÌõÑùÊ½ */
+.select-options::-webkit-scrollbar {
+    width: 8px;
+}
+
+.select-options::-webkit-scrollbar-track {
+    background: rgba(255, 255, 255, 0.05);
+    border-radius: var(--radius-sm);
+}
+
+.select-options::-webkit-scrollbar-thumb {
+    background: var(--gradient-primary);
+    border-radius: var(--radius-sm);
+}
+
+.select-options::-webkit-scrollbar-thumb:hover {
+    background: var(--gradient-accent);
+}
+
+/* È«¾ÖÒ³Ãæ¹ö¶¯ÌõÑùÊ½ */
+::-webkit-scrollbar {
+    width: 12px;
+}
+
+::-webkit-scrollbar-track {
+    background: var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb {
+    background: var(--gradient-primary);
+    border-radius: var(--radius-sm);
+    border: 2px solid var(--color-bg-secondary);
+}
+
+::-webkit-scrollbar-thumb:hover {
+    background: var(--gradient-accent);
+}
+
 /* ×Ô¶¨ÒåÏÂÀ­²Ëµ¥¹ö¶¯ÌõÑùÊ½ */
 .select-options::-webkit-scrollbar {
     width: 8px;
