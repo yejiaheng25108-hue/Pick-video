@@ -472,4 +472,16 @@ document.addEventListener('DOMContentLoaded', () => {
     loadComments(); // 加载留言
     document.getElementById('commentForm').addEventListener('submit', submitComment);
     document.getElementById('contentInput').addEventListener('input', updateCharCount);
+
+    // 留言板导航
+    document.getElementById('commentNavBtn').addEventListener('click', () => {
+        // 移除所有导航按钮的 active 状态
+        document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active'));
+
+        // 滚动到留言板
+        document.getElementById('commentBoard').scrollIntoView({
+            behavior: 'smooth',
+            block: 'start'
+        });
+    });
 });
