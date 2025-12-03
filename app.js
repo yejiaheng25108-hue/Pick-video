@@ -273,6 +273,142 @@ function setupCustomSelect() {
     });
 }
 
+// ==================== 留言系统 ====================
+
+// 加载留言
+async function loadComments() {
+    try {
+        const response = await fetch(COMMENT_API_URL);
+        const data = await response.json();
+
+        if (data.success && data.comments) {
+            renderComments(data.comments);
+        } else {
+            document.getElementById('commentsList').innerHTML = '<p class="no-comments">暂时还没有留言哦~快来抢沙发吧！</p>';
+        }
+    } catch (error) {
+        console.error('加载留言失败:', error);
+        document.getElementById('commentsList').innerHTML = '<p class="error-message">加载留言失败，请稍后重试</p>';
+    }
+}
+
+// 渲染留言列表
+function renderComments(comments) {
+    const commentsList = document.getElementById('commentsList');
+
+    if (!comments || comments.length === 0) {
+        commentsList.innerHTML = '<p class="no-comments">暂时还没有留言哦~快来抢沙发吧！</p>';
+        return;
+    }
+
+    commentsList.innerHTML = '';
+
+    comments.forEach(comment => {
+        const commentCard = document.createElement('div');
+        commentCard.className = 'comment-card';
+
+        const timeAgo = getTimeAgo(comment.created_at);
+
+        commentCard.innerHTML = `
+            <div class="comment-header">
+                <span class="comment-author">👤 ${escapeHtml(comment.nickname)}</span>
+                <span class="comment-time">${timeAgo}</span>
+            </div>
+            <div class="comment-content">${escapeHtml(comment.content)}</div>
+        `;
+
+        commentsList.appendChild(commentCard);
+    });
+}
+
+// 提交留言
+async function submitComment(e) {
+    e.preventDefault();
+
+    const nicknameInput = document.getElementById('nicknameInput');
+    const contentInput = document.getElementById('contentInput');
+    const submitBtn = document.querySelector('.btn-submit');
+
+    const nickname = nicknameInput.value.trim();
+    const content = contentInput.value.trim();
+
+    if (!nickname || !content) {
+        alert('请填写昵称和留言内容！');
+        return;
+    }
+
+    // 禁用提交按钮
+    submitBtn.disabled = true;
+    submitBtn.innerHTML = '<span class="btn-icon">⏳</span><span class="btn-text">提交中...</span>';
+
+    try {
+        const response = await fetch(COMMENT_API_URL, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ nickname, content })
+        });
+
+        const data = await response.json();
+
+        if (data.success) {
+            // 清空表单
+            nicknameInput.value = '';
+            contentInput.value = '';
+            document.getElementById('charCount').textContent = '0';
+
+            // 重新加载留言
+            await loadComments();
+
+            // 滚动到留言列表
+            document.getElementById('commentsList').scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+
+            alert('留言成功！✨');
+        } else {
+            alert(data.error || '提交失败，请稍后重试');
+        }
+    } catch (error) {
+        console.error('提交留言失败:', error);
+        alert('提交留言失败，请检查网络连接');
+    } finally {
+        // 恢复提交按钮
+        submitBtn.disabled = false;
+        submitBtn.innerHTML = '<span class="btn-icon">✨</span><span class="btn-text">发送留言</span>';
+    }
+}
+
+// 更新字符计数
+function updateCharCount() {
+    const contentInput = document.getElementById('contentInput');
+    const charCount = document.getElementById('charCount');
+    charCount.textContent = contentInput.value.length;
+}
+
+// HTML 转义（防止 XSS）
+function escapeHtml(text) {
+    const div = document.createElement('div');
+    div.textContent = text;
+    return div.innerHTML;
+}
+
+// 时间格式化（多久之前）
+function getTimeAgo(timestamp) {
+    const now = new Date();
+    const commentTime = new Date(timestamp);
+    const diffMs = now - commentTime;
+    const diffMins = Math.floor(diffMs / 60000);
+    const diffHours = Math.floor(diffMs / 3600000);
+    const diffDays = Math.floor(diffMs / 86400000);
+
+    if (diffMins < 1) return '刚刚';
+    if (diffMins < 60) return `${diffMins}分钟前`;
+    if (diffHours < 24) return `${diffHours}小时前`;
+    if (diffDays < 7) return `${diffDays}天前`;
+
+    return commentTime.toLocaleDateString('zh-CN');
+}
+
 // ==================== 事件监听 ====================
 
 document.addEventListener('DOMContentLoaded', () => {
