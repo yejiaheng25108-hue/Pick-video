@@ -1,0 +1,23 @@
+# 怪兽选片 - Robots.txt
+# 允许所有搜索引擎抓取
+
+User-agent: *
+Allow: /
+
+# 禁止抓取这些文件
+Disallow: /node_modules/
+Disallow: /.git/
+Disallow: /worker.js
+
+# 网站地图
+Sitemap: https://pick.monstervid.fun/sitemap.xml
+
+# 特定爬虫优化
+User-agent: Googlebot
+Allow: /
+
+User-agent: Baiduspider
+Allow: /
+
+User-agent: Bingbot
+Allow: /
