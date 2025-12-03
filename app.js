@@ -3,6 +3,9 @@ const API_KEY = '36c359ac72f71f2a596e69f9d65f6960';
 const BASE_URL = 'https://api.themoviedb.org/3';
 const IMAGE_BASE_URL = 'https://image.tmdb.org/t/p';
 
+// Worker API 端点 - 部署后替换为你的 Worker URL
+const COMMENT_API_URL = 'https://pick-video-api.yejiaheng25108.workers.dev/api/comments'; // 例如: https://pick-video-api.your-subdomain.workers.dev/api/comments
+
 // ==================== 全局状态 ====================
 let currentMediaType = 'movie';
 let currentGenre = '';
@@ -328,4 +331,9 @@ document.addEventListener('DOMContentLoaded', () => {
     document.addEventListener('keydown', (e) => {
         if (e.key === 'Escape') closeModal();
     });
+
+    // 留言系统
+    loadComments(); // 加载留言
+    document.getElementById('commentForm').addEventListener('submit', submitComment);
+    document.getElementById('contentInput').addEventListener('input', updateCharCount);
 });

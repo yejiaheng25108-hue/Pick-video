@@ -1,0 +1,14 @@
+name = "pick-video-api"
+main = "worker.js"
+compatibility_date = "2024-01-01"
+
+# D1 数据库绑�?
+[[d1_databases]]
+binding = "DB"
+database_name = "pick-video-comments"
+id = "fb33a113-fcdc-4fcb-81d6-ec5ef6758d64"  # 创建数据库后替换
+
+# 路由配置（部署后�?Cloudflare Dashboard 配置�?
+# routes = [
+#   { pattern = "your-site.pages.dev/api/*", zone_name = "your-site.pages.dev" }
+# ]
